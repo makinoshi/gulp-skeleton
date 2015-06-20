@@ -7,6 +7,7 @@ This repository provide forontend developing environment using glup.js.
 ## Target
 
 Compile: React.js, scss
+
 Watch and livereload: html, css, js, React.js(with Browserify) and scss
 
 ## Install
@@ -26,6 +27,7 @@ gulp
 ```
 
 It's provide resipective tasks for html, css, react and scss.
+
 So, you can use as follows
 
 ```

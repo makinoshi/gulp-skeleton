@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'), 
     browserify = require('browserify'), 
     source = require('vinyl-source-stream'), 
@@ -5,8 +7,8 @@ var gulp = require('gulp'),
     reactify = require('reactify'),
     plumber = require('gulp-plumber'), 
     uglify = require('gulp-uglify'),
-    connect = require('gulp-connect'), 
-    sass = require('gulp-ruby-sass');
+    connect = require('gulp-connect'),
+    sass = require('gulp-sass');
 
 // local server
 gulp.task('server', function() {
@@ -25,7 +27,7 @@ gulp.task('html', function() {
 
 // css task
 gulp.task('css', function() {
-  gulp.src('./css/*.css')
+  gulp.src('./css/**/*.css')
       .pipe(connect.reload());
 });
 
@@ -36,30 +38,28 @@ gulp.task('react', function(){
     transform: [reactify]
   }).bundle()
       .pipe(source('app.js'))
-      .pipe(plumber)
+      .pipe(plumber())
       .pipe(buffer())
       .pipe(uglify())
       .pipe(gulp.dest('./dist/js/'));
 });
 
 // compile scss files
-gulp.task('scss', function() {
-  gulp.src('scss/**/*.scss')
-      .pipe(plumber)
-      .pipe(scss({
-        style: 'expanded'       //other: nested, compact, compressed
-        // , compass: true
-      }))
-      .pipe(gulp.dest('./dist/css/'));
+gulp.task('sass', function() {
+  gulp.src('./scss/**/*.scss')
+      .pipe(plumber())
+      .pipe(sass().on('error', sass.logError))
+      .pipe(gulp.dest('./css'));
 });
 
-// file watch task
+// file watch and run tasks
 gulp.task('watch', function() {
-  gulp.watch(['./*html'], ['html']);
+  gulp.watch(['./*.html'], ['html']);
   gulp.watch(['./css/*.css'], ['css']);
-  gulp.watch(['./src/*.js', './src/*.jsx'], ['react']);
-  gulp.watch(['scss/**/*.scss'], ['scss']);
+  gulp.watch(['./scss/**/*.scss'], ['sass']);
+  // gulp.watch(['./src/*.js', './src/*.jsx'], ['react']);
 });
 
-gulp.task('default',
-          ['server', 'scss', 'react', 'watch']);
+// gulp.task('default', ['server', 'sass', 'react', 'watch']);
+gulp.task('default', ['server', 'sass', 'watch']);
+

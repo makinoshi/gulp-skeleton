@@ -31,17 +31,24 @@ gulp.task('css', function() {
       .pipe(connect.reload());
 });
 
+// js task
+gulp.task('js', function() {
+  gulp.src('./dist/**/*.js')
+      .pipe(connect.reload());
+});
+
 // compile react .jsx files
 gulp.task('react', function(){
   browserify({
-    entries: ['./src/main.js'],
+    entries: ['./js/main.js'],
     transform: [reactify]
   }).bundle()
-      .pipe(source('app.js'))
+      .pipe(source('main.js'))
+      .on("error", function (err) { console.log("Error : " + err.message); })
       .pipe(plumber())
       .pipe(buffer())
       .pipe(uglify())
-      .pipe(gulp.dest('./dist/js/'));
+      .pipe(gulp.dest('./dist/'));
 });
 
 // compile scss files
@@ -55,11 +62,11 @@ gulp.task('sass', function() {
 // file watch and run tasks
 gulp.task('watch', function() {
   gulp.watch(['./*.html'], ['html']);
-  gulp.watch(['./css/*.css'], ['css']);
+  gulp.watch(['./css/**/*.css'], ['css']);
+  gulp.watch(['./dist/**/*.js'], ['js']);
   gulp.watch(['./scss/**/*.scss'], ['sass']);
-  // gulp.watch(['./src/*.js', './src/*.jsx'], ['react']);
+  gulp.watch(['./js/*.js', './js/*.jsx'], ['react']);
 });
 
-// gulp.task('default', ['server', 'sass', 'react', 'watch']);
-gulp.task('default', ['server', 'sass', 'watch']);
+gulp.task('default', ['server', 'sass', 'react', 'watch']);
 

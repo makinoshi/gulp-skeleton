@@ -1,11 +1,11 @@
 'use strict';
 
-var gulp = require('gulp'), 
-    browserify = require('browserify'), 
-    source = require('vinyl-source-stream'), 
-    buffer = require('vinyl-buffer'), 
+var gulp = require('gulp'),
+    browserify = require('browserify'),
+    source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
     reactify = require('reactify'),
-    plumber = require('gulp-plumber'), 
+    plumber = require('gulp-plumber'),
     uglify = require('gulp-uglify'),
     connect = require('gulp-connect'),
     sass = require('gulp-sass');
@@ -40,14 +40,14 @@ gulp.task('js', function() {
 // compile react .jsx files
 gulp.task('react', function(){
   browserify({
-    entries: ['./js/main.js'],
+    entries: ['./js/main.jsx'],
     transform: [reactify]
   }).bundle()
-      .pipe(source('main.js'))
       .on("error", function (err) { console.log("Error : " + err.message); })
+      .pipe(source('main.js'))
       .pipe(plumber())
       .pipe(buffer())
-      .pipe(uglify())
+      // .pipe(uglify())
       .pipe(gulp.dest('./dist/'));
 });
 
@@ -69,4 +69,3 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['server', 'sass', 'react', 'watch']);
-

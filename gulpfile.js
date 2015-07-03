@@ -7,34 +7,35 @@ var gulp = require('gulp'),
     reactify = require('reactify'),
     plumber = require('gulp-plumber'),
     uglify = require('gulp-uglify'),
-    connect = require('gulp-connect'),
+    browserSync = require('browser-sync'),
     sass = require('gulp-sass');
 
 // local server
 gulp.task('server', function() {
-  connect.server({
-    root: ['./'],
-    port: 8000,
-    livereload: true
+  browserSync({
+    server: {
+      baseDir: "./",
+      index: "index.html"
+    }
   });
 });
 
 // html task
 gulp.task('html', function() {
   gulp.src('./*.html')
-      .pipe(connect.reload());
+      .pipe(browserSync.reload());
 });
 
 // css task
 gulp.task('css', function() {
   gulp.src('./css/**/*.css')
-      .pipe(connect.reload());
+      .pipe(browserSync.reload());
 });
 
 // js task
 gulp.task('js', function() {
   gulp.src('./dist/**/*.js')
-      .pipe(connect.reload());
+      .pipe(browserSync.reload());
 });
 
 // compile react .jsx files
